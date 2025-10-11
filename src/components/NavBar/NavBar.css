@@ -1,0 +1,7 @@
+a.active {
+    color: var(--color-primary);
+
+    .tag {
+        display: block;
+    }
+}

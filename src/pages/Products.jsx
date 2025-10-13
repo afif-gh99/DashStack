@@ -7,6 +7,7 @@ import Card from "../components/Card/Card"
 import { MdOutlineRefresh } from "react-icons/md"
 import { Flip, toast } from "react-toastify"
 import { SearchContext } from "../SearchContext"
+import { PiSortAscendingBold, PiSortDescendingBold } from "react-icons/pi"
 
 const Products = () => {
     const { search } = useContext(SearchContext)
@@ -14,7 +15,9 @@ const Products = () => {
     const [items, setItems] = useState("")
     const [deletedId, setDeleted] = useState(0)
     const [rotate, setRotate] = useState(0)
+    const [rotateSort, setRotateSort] = useState(0)
     const [refresh, setRefresh] = useState(false)
+    const [sort, setSort] = useState("newest")
     useEffect(() => {
         axios.get("https://vica.website/api/items", {
             headers: {
@@ -23,12 +26,12 @@ const Products = () => {
             }
         })
             .then(res => {
-                setRefresh(false)
-                setItems(res.data)
+                setItems(sort == "newest" ? res.data.reverse() : res.data)
                 setFiltered(res.data)
+                setRefresh(false)
             })
             .catch(err => console.log(err))
-    }, [deletedId, refresh])
+    }, [deletedId, refresh, sort])
     useEffect(() => {
         if (search.trim() === "") {
             setFiltered(items)
@@ -45,11 +48,28 @@ const Products = () => {
         <PageContainer title="All Products" className="relative">
             <div className="absolute right-5 top-20 flex gap-2.5 items-center justify-center">
                 <button onClick={() => {
+                    toast.info(sort == 'newest' ? "Sorting from oldest..." : "Sorting from newest...", {
+                        position: "top-center",
+                        autoClose: 500,
+                        hideProgressBar: true,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: localStorage.getItem("mode") === "true" ? "dark" : "light",
+                        transition: Flip,
+                    });
+                    setRotateSort(prev => prev + 180)
+                    setRefresh(true)
+                    setSort(sort == "newest" ? "oldest" : "newest")
+                }} className="text-white text-lg  bg-primary duration-300 hover:bg-hover-primary md:px-3 w-[38px] h-[38px] md:py-2.5 px-2.5 py-2.5 rounded-lg cursor-pointer">
+                    <PiSortAscendingBold className="duration-700 ease-in-out" style={{ transform: `rotate(${rotateSort}deg)` }} />  </button>
+                <button onClick={() => {
                     setRefresh(true)
                     setRotate(prev => prev + 360)
                     toast.info('Upadting Products...', {
                         position: "top-right",
-                        autoClose: 5000,
+                        autoClose: 1000,
                         hideProgressBar: false,
                         closeOnClick: false,
                         pauseOnHover: true,

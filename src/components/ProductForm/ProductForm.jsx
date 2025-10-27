@@ -56,7 +56,7 @@ const ProductForm = ({ btn, inputs, setNew, date, time }) => {
                         <div key={index} className="">
                             <label htmlFor="prodImg" className="cursor-pointer w-full ">
                                 <input onChange={(event) => handelImage(event)} type={input?.type} name={input?.name} id="prodImg" accept="image/*" hidden />
-                                <div className=" h-[200px] bg-[#f5f7ff] rounded-[20px] border-2 duration-300 dark:bg-darknav-bg dark:text-white  border-primary border-dashed flex flex-col justify-center items-center">
+                                <div className="overflow-hidden h-[200px] bg-[#f5f7ff] rounded-[20px] border-2 duration-300 dark:bg-darknav-bg dark:text-white  border-primary border-dashed flex flex-col justify-center items-center">
                                     <img className="w-[190px]" src={productImg || input?.url} alt="" />
                                     <BsUpload className={`text-[90px] text-primary ${input?.url || productImg ? "hidden" : ""}`} />
                                     <p className={`mt-5 ${input?.url || productImg ? "hidden" : ""}`}>{input?.label}</p>
